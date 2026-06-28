@@ -21,7 +21,7 @@ public class CountdownExpansion implements ExpansionProvider {
                 .version("1.0.0")
                 .author("UsainSrht")
                 .globalPlaceholder("countdown", (queue, ctx) -> {
-                    String defaultDatetimeStr = configManager.getProperty("datetime", "2026-12-31T23:59:59Z");
+                    String defaultDatetimeStr = configManager.getProperty("datetime", "2026-12-31 23:59:59");
                     String defaultFormatStr = configManager.getProperty("format", "%dd:%hh:%mm:%ss");
                     String defaultFinishText = configManager.getProperty("finishtext", "Countdown finished!");
 
@@ -93,6 +93,18 @@ public class CountdownExpansion implements ExpansionProvider {
 
         try {
             return Instant.parse(input);
+        } catch (Exception e) {
+            // Ignore
+        }
+
+        try {
+            return LocalDateTime.parse(input).atZone(ZoneId.systemDefault()).toInstant();
+        } catch (Exception e) {
+            // Ignore
+        }
+
+        try {
+            return LocalDate.parse(input).atStartOfDay(ZoneId.systemDefault()).toInstant();
         } catch (Exception e) {
             // Ignore
         }

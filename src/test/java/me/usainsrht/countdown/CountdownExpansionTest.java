@@ -3,6 +3,7 @@ package me.usainsrht.countdown;
 import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +39,28 @@ public class CountdownExpansionTest {
         String dateStr = "2026-06-28 15:30:29";
         Instant expected = LocalDateTime.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                 .atZone(ZoneId.systemDefault())
+                .toInstant();
+        Instant result = CountdownExpansion.parseDateTime(dateStr, defaultVal);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testParseDateTimeISOLocalDateTime() {
+        Instant defaultVal = Instant.EPOCH;
+        String dateStr = "2026-06-28T15:30:29";
+        Instant expected = LocalDateTime.parse(dateStr)
+                .atZone(ZoneId.systemDefault())
+                .toInstant();
+        Instant result = CountdownExpansion.parseDateTime(dateStr, defaultVal);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testParseDateTimeISOLocalDate() {
+        Instant defaultVal = Instant.EPOCH;
+        String dateStr = "2026-06-28";
+        Instant expected = LocalDate.parse(dateStr)
+                .atStartOfDay(ZoneId.systemDefault())
                 .toInstant();
         Instant result = CountdownExpansion.parseDateTime(dateStr, defaultVal);
         assertEquals(expected, result);
